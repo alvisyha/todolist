@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useDispatch } from "react-redux"
-import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
-import { id } from "date-fns/locale"
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Dialog,
   DialogContent,
@@ -19,25 +19,32 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
-import { TodoORM } from "./todo-app"
+} from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { TodoORM } from "./todo-app";
 
 interface AddTodoDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export default function AddTodoDialog({ open, onOpenChange }: AddTodoDialogProps) {
-  const dispatch = useDispatch()
-  const [text, setText] = useState("")
-  const [priority, setPriority] = useState<"low" | "medium" | "high">("medium")
-  const [category, setCategory] = useState("")
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
+export default function AddTodoDialog({
+  open,
+  onOpenChange,
+}: AddTodoDialogProps) {
+  const dispatch = useDispatch();
+  const [text, setText] = useState("");
+  const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
+  const [category, setCategory] = useState("");
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (text.trim()) {
       TodoORM.create(
@@ -48,17 +55,17 @@ export default function AddTodoDialog({ open, onOpenChange }: AddTodoDialogProps
           category: category || undefined,
           dueDate: dueDate ? dueDate.toISOString() : undefined,
         },
-        dispatch,
-      )
+        dispatch
+      );
 
       // Reset form
-      setText("")
-      setPriority("medium")
-      setCategory("")
-      setDueDate(undefined)
-      onOpenChange(false)
+      setText("");
+      setPriority("medium");
+      setCategory("");
+      setDueDate(undefined);
+      onOpenChange(false);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -66,7 +73,9 @@ export default function AddTodoDialog({ open, onOpenChange }: AddTodoDialogProps
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Tambah Tugas Baru</DialogTitle>
-            <DialogDescription>Buat tugas baru dengan detail lengkap.</DialogDescription>
+            <DialogDescription>
+              Buat tugas baru dengan detail lengkap.
+            </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
@@ -94,7 +103,10 @@ export default function AddTodoDialog({ open, onOpenChange }: AddTodoDialogProps
 
             <div className="grid gap-2">
               <Label>Prioritas</Label>
-              <RadioGroup value={priority} onValueChange={(value) => setPriority(value as any)}>
+              <RadioGroup
+                value={priority}
+                onValueChange={(value) => setPriority(value)}
+              >
                 <div className="flex items-center space-x-6">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="low" id="low" />
@@ -124,21 +136,34 @@ export default function AddTodoDialog({ open, onOpenChange }: AddTodoDialogProps
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className={`w-full justify-start text-left font-normal ${!dueDate && "text-muted-foreground"}`}
+                    className={`w-full justify-start text-left font-normal ${
+                      !dueDate && "text-muted-foreground"
+                    }`}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dueDate ? format(dueDate, "PPP", { locale: id }) : "Pilih tanggal"}
+                    {dueDate
+                      ? format(dueDate, "PPP", { locale: id })
+                      : "Pilih tanggal"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={dueDate} onSelect={setDueDate} initialFocus />
+                  <Calendar
+                    mode="single"
+                    selected={dueDate}
+                    onSelect={setDueDate}
+                    initialFocus
+                  />
                 </PopoverContent>
               </Popover>
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Batal
             </Button>
             <Button type="submit">Tambah Tugas</Button>
@@ -146,5 +171,5 @@ export default function AddTodoDialog({ open, onOpenChange }: AddTodoDialogProps
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
