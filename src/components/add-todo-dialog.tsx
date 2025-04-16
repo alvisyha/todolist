@@ -105,7 +105,9 @@ export default function AddTodoDialog({
               <Label>Prioritas</Label>
               <RadioGroup
                 value={priority}
-                onValueChange={(value) => setPriority(value)}
+                onValueChange={(value: "low" | "medium" | "high") =>
+                  setPriority(value)
+                }
               >
                 <div className="flex items-center space-x-6">
                   <div className="flex items-center space-x-2">
