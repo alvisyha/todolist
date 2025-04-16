@@ -68,36 +68,35 @@ const ChartContainer = React.forwardRef<
 ChartContainer.displayName = "Chart";
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+  // Filter config yang memiliki tema atau warna
   const colorConfig = Object.entries(config).filter(
-    ([_unused, config]) => config.theme || config.color
+    ([, itemConfig]) => itemConfig.theme || itemConfig.color
   );
 
+  // Jika tidak ada konfigurasi warna, tidak perlu rendering style
   if (!colorConfig.length) {
     return null;
   }
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
-  })
-  .join("\n")}
-}
-`
-          )
-          .join("\n"),
-      }}
-    />
-  );
+  // Generate styles untuk tema dan warna
+  const generatedStyles = Object.entries(THEMES)
+    .map(
+      ([theme, prefix]) => `
+      ${prefix} [data-chart=${id}] {
+        ${colorConfig
+          .map(([key, itemConfig]) => {
+            const color =
+              itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
+              itemConfig.color;
+            return color ? `  --color-${key}: ${color};` : "";
+          })
+          .join("\n")}
+      }
+    `
+    )
+    .join("\n");
+
+  return <style dangerouslySetInnerHTML={{ __html: generatedStyles }} />;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
