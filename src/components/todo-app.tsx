@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import {
   configureStore,
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Search, Plus, Moon, Sun, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
